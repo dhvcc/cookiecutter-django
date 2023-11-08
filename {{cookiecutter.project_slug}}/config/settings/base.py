@@ -76,15 +76,22 @@ DJANGO_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # "django.contrib.humanize", # Handy template tags
+    {%- if cookiecutter.use_jazzmin == 'y' %}
+    "jazzmin",
+    {%- endif %}
     "django.contrib.admin",
     "django.forms",
 ]
 THIRD_PARTY_APPS = [
+{%- if cookiecutter.use_ui == 'y' %}
     "crispy_forms",
     "crispy_bootstrap5",
+{%- endif %}
+{%- if cookiecutter.use_allauth == 'y' %}
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
+{%- endif %}
 {%- if cookiecutter.use_celery == 'y' %}
     "django_celery_beat",
 {%- endif %}
@@ -114,10 +121,12 @@ MIGRATION_MODULES = {"sites": "{{ cookiecutter.project_slug }}.contrib.sites.mig
 # AUTHENTICATION
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#authentication-backends
-AUTHENTICATION_BACKENDS = [
-    "django.contrib.auth.backends.ModelBackend",
+# AUTHENTICATION_BACKENDS = [
+#     "django.contrib.auth.backends.ModelBackend",
+    {%- if cookiecutter.use_allauth == 'y' %}
     "allauth.account.auth_backends.AuthenticationBackend",
-]
+    {%- endif %}
+# ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
 AUTH_USER_MODEL = "users.User"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
@@ -161,7 +170,9 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    {%- if cookiecutter.use_allauth == 'y' %}
     "allauth.account.middleware.AccountMiddleware",
+    {%- endif %}
 ]
 
 # STATIC
@@ -207,7 +218,9 @@ TEMPLATES = [
                 "django.template.context_processors.static",
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
+                {%- if cookiecutter.use_allauth == 'y' %}
                 "{{cookiecutter.project_slug}}.users.context_processors.allauth_settings",
+                {%- endif %}
             ],
         },
     }
@@ -216,9 +229,11 @@ TEMPLATES = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#form-renderer
 FORM_RENDERER = "django.forms.renderers.TemplatesSetting"
 
+{%- if cookiecutter.use_ui == 'y' %}
 # http://django-crispy-forms.readthedocs.io/en/latest/install.html#template-packs
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+{%- endif %}
 
 # FIXTURES
 # ------------------------------------------------------------------------------
@@ -237,6 +252,7 @@ X_FRAME_OPTIONS = "DENY"
 # EMAIL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
+# TODO: use_email
 EMAIL_BACKEND = env(
     "DJANGO_EMAIL_BACKEND",
     default="django.core.mail.backends.smtp.EmailBackend",
@@ -247,14 +263,35 @@ EMAIL_TIMEOUT = 5
 # ADMIN
 # ------------------------------------------------------------------------------
 # Django Admin URL.
+{%- if cookiecutter.use_ui == 'n' %}
+ADMIN_URL = ""
+{%- elif cookiecutter.use_ui == 'y' %}
 ADMIN_URL = "admin/"
+{%- endif %}
 # https://docs.djangoproject.com/en/dev/ref/settings/#admins
 ADMINS = [("""{{cookiecutter.author_name}}""", "{{cookiecutter.email}}")]
 # https://docs.djangoproject.com/en/dev/ref/settings/#managers
 MANAGERS = ADMINS
 # https://cookiecutter-django.readthedocs.io/en/latest/settings.html#other-environment-settings
 # Force the `admin` sign in process to go through the `django-allauth` workflow
+{%- if cookiecutter.use_allauth == 'y' %}
 DJANGO_ADMIN_FORCE_ALLAUTH = env.bool("DJANGO_ADMIN_FORCE_ALLAUTH", default=False)
+{%- endif %}
+
+{%- if cookiecutter.use_jazzmin == 'y' %}
+# JAZZMIN
+# ------------------------------------------------------------------------------
+JAZZMIN_SETTINGS = {
+    "site_title": "{{ cookiecutter.project_name }}",
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.user": "fas fa-user",
+        "auth.Group": "fas fa-users",
+        "sites.site": "fas fa-globe",
+        "authtoken.tokenproxy": "fas fa-key",
+    }
+}
+{%- endif %}
 
 # LOGGING
 # ------------------------------------------------------------------------------
@@ -316,6 +353,7 @@ CELERY_WORKER_SEND_TASK_EVENTS = True
 CELERY_TASK_SEND_SENT_EVENT = True
 
 {%- endif %}
+{%- if cookiecutter.use_allauth == 'y' %}
 # django-allauth
 # ------------------------------------------------------------------------------
 ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True)
@@ -339,6 +377,7 @@ ACCOUNT_FORMS = {"signup": "{{cookiecutter.project_slug}}.users.forms.UserSignup
 SOCIALACCOUNT_ADAPTER = "{{cookiecutter.project_slug}}.users.adapters.SocialAccountAdapter"
 # https://django-allauth.readthedocs.io/en/latest/forms.html
 SOCIALACCOUNT_FORMS = {"signup": "{{cookiecutter.project_slug}}.users.forms.UserSocialSignupForm"}
+{%- endif %}
 {% if cookiecutter.frontend_pipeline == 'Django Compressor' -%}
 # django-compressor
 # ------------------------------------------------------------------------------

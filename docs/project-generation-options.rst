@@ -102,6 +102,12 @@ use_async:
 use_drf:
     Indicates whether the project should be configured to use `Django Rest Framework`_.
 
+use_ui:
+    Indicates wthether the project should have a UI outside of django admin
+
+use_allauth:
+    Indicates whether the project should use allauth
+
 frontend_pipeline:
     Select a pipeline to compile and optimise frontend assets (JS, CSS, ...):
 

@@ -10,12 +10,21 @@ TODO: restrict Cookiecutter Django project initialization
 from __future__ import print_function
 
 import sys
+import os
+from collections import OrderedDict
 
 TERMINATOR = "\x1b[0m"
 WARNING = "\x1b[1;33m [WARNING]: "
 INFO = "\x1b[1;33m [INFO]: "
 HINT = "\x1b[3;33m"
 SUCCESS = "\x1b[1;32m [SUCCESS]: "
+
+context = {{ cookiecutter }}
+print(context)
+
+# Check if use_ui is set to True
+if context["use_ui"]:
+    context["frontend_pipeline"] = "None"
 
 # The content of this string is evaluated by Jinja, and plays an important role.
 # It updates the cookiecutter context to trim leading and trailing spaces

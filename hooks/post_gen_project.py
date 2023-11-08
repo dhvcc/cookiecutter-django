@@ -428,6 +428,12 @@ def remove_drf_starter_files():
     os.remove(os.path.join("{{cookiecutter.project_slug}}", "users", "tests", "test_drf_views.py"))
     os.remove(os.path.join("{{cookiecutter.project_slug}}", "users", "tests", "test_swagger.py"))
 
+def remove_template_files():
+    shutil.rmtree(os.path.join("{{cookiecutter.project_slug}}", "templates"))
+
+
+def remove_allauth_files():
+    pass
 
 def remove_storages_module():
     os.remove(os.path.join("{{cookiecutter.project_slug}}", "utils", "storages.py"))
@@ -520,6 +526,12 @@ def main():
 
     if "{{ cookiecutter.use_drf }}".lower() == "n":
         remove_drf_starter_files()
+
+    if "{{ cookiecutter.use_ui }}".lower() == "n":
+        remove_template_files()
+
+    if "{{ cookiecutter.use_allauth }}".lower() == "n":
+        remove_allauth_files()
 
     if "{{ cookiecutter.use_async }}".lower() == "n":
         remove_async_files()

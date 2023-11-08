@@ -51,9 +51,11 @@ DJANGO_AZURE_ACCOUNT_KEY=
 DJANGO_AZURE_ACCOUNT_NAME=
 DJANGO_AZURE_CONTAINER_NAME=
 {% endif %}
+{%- if cookiecutter.use_allauth == 'y' %}
 # django-allauth
 # ------------------------------------------------------------------------------
 DJANGO_ACCOUNT_ALLOW_REGISTRATION=True
+{%- endif %}
 
 # Gunicorn
 # ------------------------------------------------------------------------------
