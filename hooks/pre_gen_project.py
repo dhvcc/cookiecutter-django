@@ -25,6 +25,8 @@ print(context)
 # Check if use_ui is set to True
 if context["use_ui"]:
     context["frontend_pipeline"] = "None"
+if context["ci_tool"] != "GitHub":
+    context["use_dependabot"] = "None"
 
 # The content of this string is evaluated by Jinja, and plays an important role.
 # It updates the cookiecutter context to trim leading and trailing spaces

@@ -59,4 +59,6 @@ class UserAdmin(auth_admin.UserAdmin):
         ),
     )
     {%- endif %}
+{%- elif cookiecutter.use_allauth == 'n' %}
+admin.site.register(User)
 {%- endif %}

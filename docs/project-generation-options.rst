@@ -108,6 +108,12 @@ use_ui:
 use_allauth:
     Indicates whether the project should use allauth
 
+use_readthedocs:
+    Indicates whether the project should generate and run readthedocs
+
+use_dependabot:
+    Indicates whether the project should use dependabot. False if CI tool is not GitHub
+
 frontend_pipeline:
     Select a pipeline to compile and optimise frontend assets (JS, CSS, ...):
 

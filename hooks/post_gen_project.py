@@ -428,12 +428,24 @@ def remove_drf_starter_files():
     os.remove(os.path.join("{{cookiecutter.project_slug}}", "users", "tests", "test_drf_views.py"))
     os.remove(os.path.join("{{cookiecutter.project_slug}}", "users", "tests", "test_swagger.py"))
 
+
 def remove_template_files():
     shutil.rmtree(os.path.join("{{cookiecutter.project_slug}}", "templates"))
 
 
 def remove_allauth_files():
     pass
+
+
+def remove_readthedocs_files():
+    shutil.rmtree(os.path.join("docs"))
+    shutil.rmtree(os.path.join("compose", "local", "docs"))
+    os.remove(os.path.join(".readthedocs.yml"))
+
+
+def remove_dependabot_files():
+    os.remove(os.path.join(".github", "dependabot.yml"))
+
 
 def remove_storages_module():
     os.remove(os.path.join("{{cookiecutter.project_slug}}", "utils", "storages.py"))
@@ -524,6 +536,9 @@ def main():
     if "{{ cookiecutter.ci_tool }}" != "Drone":
         remove_dotdrone_file()
 
+    if "{{ cookiecutter.use_dependabot }}".lower() == "n":
+        remove_dependabot_files()
+
     if "{{ cookiecutter.use_drf }}".lower() == "n":
         remove_drf_starter_files()
 
@@ -532,6 +547,9 @@ def main():
 
     if "{{ cookiecutter.use_allauth }}".lower() == "n":
         remove_allauth_files()
+
+    if "{{ cookiecutter.use_readthedocs }}".lower() == "n":
+        remove_readthedocs_files()
 
     if "{{ cookiecutter.use_async }}".lower() == "n":
         remove_async_files()
