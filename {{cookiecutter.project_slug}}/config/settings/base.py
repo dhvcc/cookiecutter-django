@@ -1,6 +1,7 @@
 """
 Base settings to build other settings files upon.
 """
+import os
 from pathlib import Path
 
 import environ
@@ -255,8 +256,11 @@ X_FRAME_OPTIONS = "DENY"
 # TODO: use_email
 EMAIL_BACKEND = env(
     "DJANGO_EMAIL_BACKEND",
-    default={%- if cookiecutter.mail_service == 'None' %}None
-            {%- else %}"django.core.mail.backends.smtp.EmailBackend"{%- endif %}
+    {%- if cookiecutter.mail_service == 'None' %}
+    default=None,
+    {%- else %}"
+    default=django.core.mail.backends.smtp.EmailBackend",
+    {%- endif %}
 )
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
 EMAIL_TIMEOUT = 5
@@ -315,6 +319,15 @@ LOGGING = {
         }
     },
     "root": {"level": "INFO", "handlers": ["console"]},
+    {%- if cookiecutter.mail_service == 'None' %}
+    "loggers": {
+        "django": {
+            "handlers": [],
+            "level": os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+            "propagate": False,
+        },
+    },
+    {%- endif %}
 }
 
 {% if cookiecutter.use_celery == 'y' -%}
