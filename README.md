@@ -155,6 +155,7 @@ Answer the prompts with your own desired [options](http://cookiecutter-django.re
     7 - SendinBlue
     8 - SparkPost
     9 - Other SMTP
+    10 - None
     Choose from 1, 2, 3, 4, 5, 6, 7, 8, 9 [1]: 1
     use_async [n]: n
     use_drf [n]: y

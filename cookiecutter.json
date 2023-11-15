@@ -29,7 +29,8 @@
     "Sendgrid",
     "SendinBlue",
     "SparkPost",
-    "Other SMTP"
+    "Other SMTP",
+    "None"
   ],
   "use_async": "n",
   "use_drf": "y",

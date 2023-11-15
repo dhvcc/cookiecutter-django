@@ -139,10 +139,10 @@ MEDIA_URL = f"https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/media/"
 # https://docs.djangoproject.com/en/dev/ref/settings/#default-from-email
 DEFAULT_FROM_EMAIL = env(
     "DJANGO_DEFAULT_FROM_EMAIL",
-    default="{{cookiecutter.project_name}} <noreply@{{cookiecutter.domain_name}}>",
+    default=None,
 )
 # https://docs.djangoproject.com/en/dev/ref/settings/#server-email
-SERVER_EMAIL = env("DJANGO_SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
+SERVER_EMAIL = env("DJANGO_SERVER_EMAIL", default=None)
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-subject-prefix
 EMAIL_SUBJECT_PREFIX = env(
     "DJANGO_EMAIL_SUBJECT_PREFIX",
@@ -154,12 +154,14 @@ EMAIL_SUBJECT_PREFIX = env(
 # Django Admin URL regex.
 ADMIN_URL = env("DJANGO_ADMIN_URL")
 
+{%- if cookiecutter.mail_service != 'None' %}
 # Anymail
 # ------------------------------------------------------------------------------
 # https://anymail.readthedocs.io/en/stable/installation/#installing-anymail
 INSTALLED_APPS += ["anymail"]  # noqa: F405
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
 # https://anymail.readthedocs.io/en/stable/installation/#anymail-settings-reference
+{%- endif %}
 {%- if cookiecutter.mail_service == 'Mailgun' %}
 # https://anymail.readthedocs.io/en/stable/esps/mailgun/
 EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"

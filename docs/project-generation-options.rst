@@ -95,6 +95,7 @@ mail_service:
     7. SendinBlue_
     8. SparkPost_
     9. `Other SMTP`_
+    10. None
 
 use_async:
     Indicates whether the project should use web sockets with Uvicorn + Gunicorn.
