@@ -86,16 +86,16 @@ cloud_provider:
 mail_service:
     Select an email service that Django-Anymail provides
 
-    1. Mailgun_
-    2. `Amazon SES`_
-    3. Mailjet_
-    4. Mandrill_
-    5. Postmark_
-    6. SendGrid_
-    7. SendinBlue_
-    8. SparkPost_
-    9. `Other SMTP`_
-    10. None
+    1. None
+    2. Mailgun_
+    3. `Amazon SES`_
+    4. Mailjet_
+    5. Mandrill_
+    6. Postmark_
+    7. SendGrid_
+    8. SendinBlue_
+    9. SparkPost_
+    10. `Other SMTP`_
 
 use_async:
     Indicates whether the project should use web sockets with Uvicorn + Gunicorn.
