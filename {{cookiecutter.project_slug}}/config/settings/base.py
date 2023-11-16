@@ -258,8 +258,8 @@ EMAIL_BACKEND = env(
     "DJANGO_EMAIL_BACKEND",
     {%- if cookiecutter.mail_service == 'None' %}
     default=None,
-    {%- else %}"
-    default=django.core.mail.backends.smtp.EmailBackend",
+    {%- else %}
+    default="django.core.mail.backends.smtp.EmailBackend",
     {%- endif %}
 )
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
