@@ -21,6 +21,7 @@
   "postgresql_version": ["15", "14", "13", "12", "11", "10"],
   "cloud_provider": ["None", "AWS", "GCP", "Azure"],
   "mail_service": [
+    "None",
     "Mailgun",
     "Amazon SES",
     "Mailjet",

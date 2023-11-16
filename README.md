@@ -146,15 +146,16 @@ Answer the prompts with your own desired [options](http://cookiecutter-django.re
     3 - None
     Choose from 1, 2, 3 [1]: 1
     Select mail_service:
-    1 - Mailgun
-    2 - Amazon SES
-    3 - Mailjet
-    4 - Mandrill
-    5 - Postmark
-    6 - Sendgrid
-    7 - SendinBlue
-    8 - SparkPost
-    9 - Other SMTP
+    1 - None
+    2 - Mailgun
+    3 - Amazon SES
+    4 - Mailjet
+    5 - Mandrill
+    6 - Postmark
+    7 - Sendgrid
+    8 - SendinBlue
+    9 - SparkPost
+    10 - Other SMTP
     Choose from 1, 2, 3, 4, 5, 6, 7, 8, 9 [1]: 1
     use_async [n]: n
     use_drf [n]: y
