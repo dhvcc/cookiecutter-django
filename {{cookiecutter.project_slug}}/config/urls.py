@@ -45,6 +45,8 @@ urlpatterns += [
 ]
 {%- endif %}
 
+urlpatterns += [path("api/v1/", include(f"{app_name}.urls")) for app_name in "{{ cookiecutter.apps }}".split(" ")]
+
 if settings.DEBUG:
     # This allows the error pages to be debugged during development, just visit
     # these url in browser to see how these error pages look like.

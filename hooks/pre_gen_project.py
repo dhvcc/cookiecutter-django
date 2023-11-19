@@ -10,7 +10,6 @@ TODO: restrict Cookiecutter Django project initialization
 from __future__ import print_function
 
 import sys
-import os
 from collections import OrderedDict
 
 TERMINATOR = "\x1b[0m"

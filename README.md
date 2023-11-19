@@ -178,6 +178,11 @@ Answer the prompts with your own desired [options](http://cookiecutter-django.re
     Choose from 1, 2, 3, 4 [1]: 4
     keep_local_envs_in_vcs [y]: y
     debug [n]: n
+    Enter apps:
+        1 - app1
+        2 - app2
+        n - ...
+    Arbitrary number of Django apps to be created ["app1", "app_2", "..."]: app1 app_2
 
 Enter the project and take a look around:
 
