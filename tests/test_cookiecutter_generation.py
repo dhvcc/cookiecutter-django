@@ -136,6 +136,17 @@ SUPPORTED_COMBINATIONS = [
     {"keep_local_envs_in_vcs": "n"},
     {"debug": "y"},
     {"debug": "n"},
+    {"use_jazzmin": "y"},
+    {"use_jazzmin": "n"},
+    {"use_ui": "y", "use_allauth": "n", "frontend_pipeline": "None"},
+    {"use_ui": "n", "use_allauth": "y", "frontend_pipeline": "Django Compressor"},
+    {"use_ui": "n", "use_allauth": "y", "frontend_pipeline": "Gulp"},
+    {"use_ui": "n", "use_allauth": "y", "frontend_pipeline": "Webpack"},
+    {"use_dependabot": "n", "ci_tool": "None"},
+    {"use_dependabot": "n", "ci_tool": "Travis"},
+    {"use_dependabot": "n", "ci_tool": "Gitlab"},
+    {"use_dependabot": "n", "ci_tool": "Drone"},
+    {"use_dependabot": "y", "ci_tool": "Github"},
 ]
 
 UNSUPPORTED_COMBINATIONS = [
@@ -143,6 +154,14 @@ UNSUPPORTED_COMBINATIONS = [
     {"cloud_provider": "GCP", "mail_service": "Amazon SES"},
     {"cloud_provider": "Azure", "mail_service": "Amazon SES"},
     {"cloud_provider": "None", "mail_service": "Amazon SES"},
+    {"use_ui": "y", "use_allauth": "y", "frontend_pipeline": "None"},
+    {"use_ui": "y", "use_allauth": "n", "frontend_pipeline": "Django Compressor"},
+    {"use_ui": "y", "use_allauth": "n", "frontend_pipeline": "Gulp"},
+    {"use_ui": "y", "use_allauth": "n", "frontend_pipeline": "Webpack"},
+    {"use_dependabot": "y", "ci_tool": "None"},
+    {"use_dependabot": "y", "ci_tool": "Travis"},
+    {"use_dependabot": "y", "ci_tool": "Gitlab"},
+    {"use_dependabot": "y", "ci_tool": "Drone"},
 ]
 
 
