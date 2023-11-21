@@ -77,3 +77,7 @@ if "{{ cookiecutter.use_whitenoise }}".lower() == "n" and "{{ cookiecutter.cloud
 if "{{ cookiecutter.mail_service }}" == "Amazon SES" and "{{ cookiecutter.cloud_provider }}" != "AWS":
     print("You should either use AWS or select a different " "Mail Service for sending emails.")
     sys.exit(1)
+
+if "{{ cookiecutter.use_allauth }}".lower() == "n" and "{{ cookiecutter.use_ui }}".lower() == "y":
+    print("You should either enable allauth to use the UI or " "Start with the UI disabled.")
+    sys.exit(1)
