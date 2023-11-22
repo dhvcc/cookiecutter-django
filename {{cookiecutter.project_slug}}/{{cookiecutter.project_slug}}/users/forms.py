@@ -1,5 +1,7 @@
+{%- if cookiecutter.use_allauth == 'y' %}
 from allauth.account.forms import SignupForm
 from allauth.socialaccount.forms import SignupForm as SocialSignupForm
+{%- endif %}
 from django.contrib.auth import forms as admin_forms
 from django.contrib.auth import get_user_model
 {%- if cookiecutter.username_type == "email" %}
@@ -39,6 +41,7 @@ class UserAdminCreationForm(admin_forms.UserCreationForm):
         {%- endif %}
 
 
+{%- if cookiecutter.use_allauth == 'y' %}
 class UserSignupForm(SignupForm):
     """
     Form that will be rendered on a user sign up section/screen.
@@ -53,3 +56,4 @@ class UserSocialSignupForm(SocialSignupForm):
     Default fields will be added automatically.
     See UserSignupForm otherwise.
     """
+{%- endif %}
