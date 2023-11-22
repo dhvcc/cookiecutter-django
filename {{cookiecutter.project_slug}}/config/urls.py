@@ -17,7 +17,7 @@ urlpatterns = [
     path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
     path("about/", TemplateView.as_view(template_name="pages/about.html"), name="about"),
     # User management
-    path("users/", include("{{ cookiecutter.project_slug }}.users.urls", namespace="users")),
+    path("users/", include(("{{ cookiecutter.project_slug }}.users.urls", "users"), namespace="users")),
     {%- endif %}
     {%- if cookiecutter.use_allauth == 'y' %}
     path("accounts/", include("allauth.urls")),
