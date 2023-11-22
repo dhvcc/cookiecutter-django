@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 
 def create_superuser(apps, schema_editor):
     User = get_user_model()
-    User.objects.create_superuser(email='u', password='u')
+    User.objects.create_superuser(username='u', email='', password='u')
 
 
 class Migration(migrations.Migration):
