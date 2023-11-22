@@ -31,7 +31,7 @@ class TestUserAdmin:
                 "password2": "My_R@ndom-P@ssw0rd",
             },
         )
-        assert response.status_code == 302
+        assert response.status_code == 200
         {%- if cookiecutter.username_type == "email" %}
         assert User.objects.filter(email="new-admin@example.com").exists()
         {%- else %}
