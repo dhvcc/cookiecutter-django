@@ -34,7 +34,7 @@ SUCCESS = "\x1b[1;32m [SUCCESS]: "
 DEBUG_VALUE = "debug"
 
 PROJECT_SLUG = "{{cookiecutter.project_slug}}"
-DJANGO_APP_FILES = (
+DJANGO_APP_FILES = (  # This tuple represents all files that will be created inside a Django app
     "__init__.py",
     "admin.py",
     "models.py",
@@ -468,27 +468,33 @@ def remove_storages_module():
 
 def generate_django_apps():
     app_names = [app_name for app_name in "{{cookiecutter.apps}}".split(" ")]
-    apps_file_path = Path(os.path.join(PROJECT_SLUG, "templates", "apps_template"))
-    urls_file_path = Path(os.path.join(PROJECT_SLUG, "templates", "urls_template"))
+    django_apps_template_dir = Path(os.path.join(PROJECT_SLUG, "templates", "django_app_files"))
+    apps_file_path = django_apps_template_dir / "apps_template"
+    urls_file_path = django_apps_template_dir / "urls_template"
 
-    create_django_app_files(
-        app_names=app_names,
-        files_to_create=DJANGO_APP_FILES,
-        apps_file_path=apps_file_path,
-        urls_file_path=urls_file_path
-    )
-    remove_template_django_app_files((apps_file_path, urls_file_path,))
+    for app in app_names:
+        target_dir = os.path.join(PROJECT_SLUG, app)  # The app's directory
+        os.makedirs(target_dir, exist_ok=True)  # Creating the directory of the app
+        create_django_app_files(
+            app_name=app,
+            target_dir=target_dir,
+            files_to_create=DJANGO_APP_FILES,
+            apps_file_path=apps_file_path,
+            urls_file_path=urls_file_path
+        )
+    shutil.rmtree(path=django_apps_template_dir)
 
 
 def create_django_app_files(
-    app_names: list[str],
+    app_name: str,
     files_to_create: tuple,
+    target_dir: Path | str,
     apps_file_path: Path | str,
-    urls_file_path: Path | str
+    urls_file_path: Path | str,
 ) -> None:
     """
     This function supports recursive files creation in the format of:
-        files_ta_create = (
+        files_to_create = (
             "file1",
             "file2.py",
             {
@@ -500,51 +506,37 @@ def create_django_app_files(
                 )
             }
         )
-    In the example above string literals represent files and nested dicts represent directories.
+    In the above example string literals represent files and nested dicts represent directories.
     """
-    for app in app_names:
-        target_dir = os.path.join(PROJECT_SLUG, app)  # The app's directory
-        os.makedirs(target_dir, exist_ok=True)  # Creating the directory of the app
-
-        # Loop through the file names to be created and add them
-        for object_name in files_to_create:
-            try:
-                # If `object_name` is a file create it
-                is_dir = isinstance(object_name, dict)
-                if not is_dir:
-                    with open(os.path.join(target_dir, object_name), "x") as f:
-                        # Copy the content of the template files to target ones
-                        if object_name == "apps.py":
-                            with open(apps_file_path, "r") as template_apps_file:
-                                content = template_apps_file.read()
-                            f.write(content.format(app.capitalize(), app))
-                        elif object_name == "urls.py":
-                            with open(urls_file_path, "r") as template_urls_file:
-                                content = template_urls_file.read()
-                            f.write(content.format(app))
-                # If `object_name# is a directory, loop through it recursively and create new files/directories
-                elif is_dir:
-                    for subdir, subfiles in object_name.items():
-                        nested_target_dir = os.path.join(target_dir, subdir)
-                        os.makedirs(nested_target_dir, exist_ok=True)
-                        for sub_object_name in subfiles:
-                            if isinstance(sub_object_name, str):
-                                with open(os.path.join(nested_target_dir, sub_object_name), "x"):
-                                    pass
-                            elif isinstance(sub_object_name, dict):
-                                create_django_app_files(
-                                    [app],
-                                    (sub_object_name,),
-                                    apps_file_path,
-                                    urls_file_path
-                                )
-            except FileExistsError:
-                pass
-
-
-def remove_template_django_app_files(files: tuple):
-    for file_path in files:
-        os.remove(file_path)
+    # Loop through the file names to be created and add them
+    for object_name in files_to_create:
+        try:
+            # If `object_name` is a file create it
+            if isinstance(object_name, str) or isinstance(object_name, Path):
+                with open(os.path.join(target_dir, object_name), "x") as f:
+                    # Copy the content of the template files to target ones
+                    if object_name == "apps.py":
+                        with open(apps_file_path, "r") as template_apps_file:
+                            content = template_apps_file.read()
+                        f.write(content.format(app_name.capitalize(), app_name))
+                    elif object_name == "urls.py":
+                        with open(urls_file_path, "r") as template_urls_file:
+                            content = template_urls_file.read()
+                        f.write(content.format(app_name))
+            # If `object_name` is a directory, loop through it recursively and create new files/directories
+            elif isinstance(object_name, dict):
+                for subdir, subfiles in object_name.items():
+                    nested_target_dir = os.path.join(target_dir, subdir)
+                    os.makedirs(nested_target_dir, exist_ok=True)
+                    create_django_app_files(
+                        app_name=app_name,
+                        target_dir=nested_target_dir,
+                        files_to_create=subfiles,
+                        apps_file_path=apps_file_path,
+                        urls_file_path=urls_file_path
+                    )
+        except FileExistsError:
+            pass
 
 
 def main():
