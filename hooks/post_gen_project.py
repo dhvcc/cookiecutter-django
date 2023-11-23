@@ -493,7 +493,7 @@ def create_django_app_files(
     urls_file_path: Path | str,
 ) -> None:
     """
-    This function supports recursive files creation in the format of:
+    This function supports recursive file creation in the format of:
         files_to_create = (
             "file1",
             "file2.py",
