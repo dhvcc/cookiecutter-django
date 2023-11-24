@@ -43,7 +43,11 @@ urlpatterns += [
         name="api-docs",
     ),
 ]
+urlpatterns += [path("api/v1/", include(f"{app_name}.urls")) for app_name in "{{ cookiecutter.apps }}".split(" ")]
+{% elif cookiecutter.use_drf == 'n' %}
+urlpatterns += [path(f"{app_name}/", include((f"{app_name}.urls", f"{app_name}"), namespace=f"{app_name}")) for app_name in "{{ cookiecutter.apps }}".split(" ")]
 {%- endif %}
+
 
 if settings.DEBUG:
     # This allows the error pages to be debugged during development, just visit

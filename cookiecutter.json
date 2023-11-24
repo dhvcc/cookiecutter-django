@@ -47,5 +47,6 @@
   "ci_tool": ["Github", "None", "Travis", "Gitlab", "Drone"],
   "use_dependabot": "n",
   "keep_local_envs_in_vcs": "n",
-  "debug": "n"
+  "debug": "n",
+  "apps": "app1 app2"
 }
