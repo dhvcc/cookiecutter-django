@@ -3,6 +3,65 @@ All enhancements and patches to Cookiecutter Django will be documented in this f
 
 <!-- GENERATOR_PLACEHOLDER -->
 
+## 2023.11.22
+
+
+### Updated
+
+- Update celery to 5.3.6 ([#4693](https://github.com/cookiecutter/cookiecutter-django/pull/4693))
+
+## 2023.11.21
+
+
+### Updated
+
+- Update sentry-sdk to 1.36.0 ([#4687](https://github.com/cookiecutter/cookiecutter-django/pull/4687))
+
+## 2023.11.20
+
+
+### Fixed
+
+- Fix bug with social account adapter name override, in very specific conditions ([#4650](https://github.com/cookiecutter/cookiecutter-django/pull/4650))
+
+### Updated
+
+- Update django-cors-headers to 4.3.1 ([#4684](https://github.com/cookiecutter/cookiecutter-django/pull/4684))
+
+- Update psycopg to 3.1.13 ([#4685](https://github.com/cookiecutter/cookiecutter-django/pull/4685))
+
+## 2023.11.14
+
+
+### Updated
+
+- Update sentry-sdk to 1.35.0 ([#4681](https://github.com/cookiecutter/cookiecutter-django/pull/4681))
+
+- Auto-update pre-commit hooks ([#4683](https://github.com/cookiecutter/cookiecutter-django/pull/4683))
+
+## 2023.11.11
+
+
+### Updated
+
+- Update celery to 5.3.5 ([#4678](https://github.com/cookiecutter/cookiecutter-django/pull/4678))
+
+## 2023.11.09
+
+
+### Updated
+
+- Auto-update pre-commit hooks ([#4673](https://github.com/cookiecutter/cookiecutter-django/pull/4673))
+
+- Update black to 23.11.0 ([#4674](https://github.com/cookiecutter/cookiecutter-django/pull/4674))
+
+## 2023.11.08
+
+
+### Updated
+
+- Update pytest-django to 4.7.0 ([#4672](https://github.com/cookiecutter/cookiecutter-django/pull/4672))
+
 ## 2023.11.06
 
 

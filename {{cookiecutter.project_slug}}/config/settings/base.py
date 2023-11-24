@@ -111,6 +111,9 @@ LOCAL_APPS = [
     "{{ cookiecutter.project_slug }}.users",
     # Your stuff: custom apps go here
 ]
+
+LOCAL_APPS += "{{ cookiecutter.apps }}".split(" ")
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
@@ -122,12 +125,12 @@ MIGRATION_MODULES = {"sites": "{{ cookiecutter.project_slug }}.contrib.sites.mig
 # AUTHENTICATION
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#authentication-backends
-# AUTHENTICATION_BACKENDS = [
-#     "django.contrib.auth.backends.ModelBackend",
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
     {%- if cookiecutter.use_allauth == 'y' %}
     "allauth.account.auth_backends.AuthenticationBackend",
     {%- endif %}
-# ]
+]
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
 AUTH_USER_MODEL = "users.User"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url

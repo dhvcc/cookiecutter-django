@@ -160,6 +160,11 @@ debug:
     Indicates whether the project should be configured for debugging.
     This option is relevant for Cookiecutter Django developers only.
 
+apps:
+    Enter names for creating Django apps. Number of names maybe from 1 to N.
+    The apps must be named according to `PEP8 Naming Conventions`_
+    Otherwise it will cause unexpected errors!
+
 
 .. _MIT: https://opensource.org/licenses/MIT
 .. _BSD: https://opensource.org/licenses/BSD-3-Clause
@@ -213,3 +218,5 @@ debug:
 .. _Drone CI: https://docs.drone.io/pipeline/overview/
 
 .. _Github Actions: https://docs.github.com/en/actions
+
+.. _PEP8 Naming Conventions: https://peps.python.org/pep-0008/#naming-conventions

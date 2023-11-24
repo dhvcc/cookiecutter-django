@@ -15,6 +15,7 @@ import os
 import random
 import shutil
 import string
+from pathlib import Path
 
 try:
     # Inspired by
@@ -32,8 +33,21 @@ SUCCESS = "\x1b[1;32m [SUCCESS]: "
 
 DEBUG_VALUE = "debug"
 
+PROJECT_SLUG = "{{cookiecutter.project_slug}}"
 USE_DOCKER = "{{ cookiecutter.use_docker }}"
 CI_TOOL = "{{ cookiecutter.ci_tool }}"
+DJANGO_APP_FILES = (  # This tuple represents all files that will be created inside a Django app
+    "__init__.py",
+    "admin.py",
+    "models.py",
+    "tests.py",
+    "views.py",
+    "urls.py",
+    "apps.py",
+    {
+        "migrations": ("__init__.py",)
+    }
+)
 
 
 def remove_open_source_files():
@@ -51,14 +65,14 @@ def remove_gplv3_files():
 def remove_custom_user_manager_files():
     os.remove(
         os.path.join(
-            "{{cookiecutter.project_slug}}",
+            PROJECT_SLUG,
             "users",
             "managers.py",
         )
     )
     os.remove(
         os.path.join(
-            "{{cookiecutter.project_slug}}",
+            PROJECT_SLUG,
             "users",
             "tests",
             "test_managers.py",
@@ -104,7 +118,7 @@ def remove_heroku_files():
 
 
 def remove_sass_files():
-    shutil.rmtree(os.path.join("{{cookiecutter.project_slug}}", "static", "sass"))
+    shutil.rmtree(os.path.join(PROJECT_SLUG, "static", "sass"))
 
 
 def remove_gulp_files():
@@ -426,14 +440,14 @@ def remove_aws_dockerfile():
 
 def remove_drf_starter_files():
     os.remove(os.path.join("config", "api_router.py"))
-    shutil.rmtree(os.path.join("{{cookiecutter.project_slug}}", "users", "api"))
-    os.remove(os.path.join("{{cookiecutter.project_slug}}", "users", "tests", "test_drf_urls.py"))
-    os.remove(os.path.join("{{cookiecutter.project_slug}}", "users", "tests", "test_drf_views.py"))
-    os.remove(os.path.join("{{cookiecutter.project_slug}}", "users", "tests", "test_swagger.py"))
+    shutil.rmtree(os.path.join(PROJECT_SLUG, "users", "api"))
+    os.remove(os.path.join(PROJECT_SLUG, "users", "tests", "test_drf_urls.py"))
+    os.remove(os.path.join(PROJECT_SLUG, "users", "tests", "test_drf_views.py"))
+    os.remove(os.path.join(PROJECT_SLUG, "users", "tests", "test_swagger.py"))
 
 
 def remove_template_files():
-    shutil.rmtree(os.path.join("{{cookiecutter.project_slug}}", "templates"))
+    shutil.rmtree(os.path.join(PROJECT_SLUG, "templates"))
 
 
 def remove_allauth_files():
@@ -451,11 +465,86 @@ def remove_dependabot_files():
 
 
 def remove_storages_module():
-    os.remove(os.path.join("{{cookiecutter.project_slug}}", "utils", "storages.py"))
+    os.remove(os.path.join(PROJECT_SLUG, "utils", "storages.py"))
+
+
+def generate_django_apps():
+    app_names = [app_name for app_name in "{{cookiecutter.apps}}".split(" ")]
+    django_apps_template_dir = Path(os.path.join(PROJECT_SLUG, "templates", "django_app_files"))
+    apps_file_path = django_apps_template_dir / "apps_template"
+    urls_file_path = django_apps_template_dir / "urls_template"
+
+    for app in app_names:
+        target_dir = os.path.join(PROJECT_SLUG, app)  # The app's directory
+        os.makedirs(target_dir, exist_ok=True)  # Creating the directory of the app
+        create_django_app_files(
+            app_name=app,
+            target_dir=target_dir,
+            files_to_create=DJANGO_APP_FILES,
+            apps_file_path=apps_file_path,
+            urls_file_path=urls_file_path
+        )
+    shutil.rmtree(path=django_apps_template_dir)
+
+
+def create_django_app_files(
+    app_name: str,
+    files_to_create: tuple,
+    target_dir: Path | str,
+    apps_file_path: Path | str,
+    urls_file_path: Path | str,
+) -> None:
+    """
+    This function supports recursive file creation in the format of:
+        files_to_create = (
+            "file1",
+            "file2.py",
+            {
+                "migrations": (
+                    "file3.py",
+                    {
+                        "nested_folder": ("file4.py", "file5.py")
+                    }
+                )
+            }
+        )
+    In the above example string literals represent files and nested dicts represent directories.
+    """
+    # Loop through the file names to be created and add them
+    for object_name in files_to_create:
+        try:
+            # If `object_name` is a file create it
+            if isinstance(object_name, str) or isinstance(object_name, Path):
+                with open(os.path.join(target_dir, object_name), "x") as f:
+                    # Copy the content of the template files to target ones
+                    if object_name == "apps.py":
+                        with open(apps_file_path, "r") as template_apps_file:
+                            content = template_apps_file.read()
+                        f.write(content.format(app_name.capitalize(), app_name))
+                    elif object_name == "urls.py":
+                        with open(urls_file_path, "r") as template_urls_file:
+                            content = template_urls_file.read()
+                        f.write(content.format(app_name))
+            # If `object_name` is a directory, loop through it recursively and create new files/directories
+            elif isinstance(object_name, dict):
+                for subdir, subfiles in object_name.items():
+                    nested_target_dir = os.path.join(target_dir, subdir)
+                    os.makedirs(nested_target_dir, exist_ok=True)
+                    create_django_app_files(
+                        app_name=app_name,
+                        target_dir=nested_target_dir,
+                        files_to_create=subfiles,
+                        apps_file_path=apps_file_path,
+                        urls_file_path=urls_file_path
+                    )
+        except FileExistsError:
+            pass
 
 
 def main():
     debug = "{{ cookiecutter.debug }}".lower() == "y"
+
+    generate_django_apps()
 
     set_flags_in_envs(
         DEBUG_VALUE if debug else generate_random_user(),

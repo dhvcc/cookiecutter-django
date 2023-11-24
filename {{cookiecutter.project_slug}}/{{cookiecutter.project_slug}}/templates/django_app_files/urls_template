@@ -1,0 +1,19 @@
+from django.conf import settings
+from django.urls import path, include
+{% if cookiecutter.use_drf == 'y' %}
+from rest_framework import routers
+{%- endif %}
+
+app_name = '{0}'
+{% if cookiecutter.use_drf == 'y' %}
+if settings.DEBUG:
+    router = routers.DefaultRouter()
+else:
+    router = routers.SimpleRouter()
+
+urlpatterns = [
+    path('', include(router.urls))
+]
+{% elif cookiecutter.use_drf == 'n' %}
+urlpatterns = []
+{%- endif %}
