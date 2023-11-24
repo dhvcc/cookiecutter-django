@@ -34,6 +34,8 @@ SUCCESS = "\x1b[1;32m [SUCCESS]: "
 DEBUG_VALUE = "debug"
 
 PROJECT_SLUG = "{{cookiecutter.project_slug}}"
+USE_DOCKER = "{{ cookiecutter.use_docker }}"
+CI_TOOL = "{{ cookiecutter.ci_tool }}"
 DJANGO_APP_FILES = (  # This tuple represents all files that will be created inside a Django app
     "__init__.py",
     "admin.py",
@@ -108,7 +110,7 @@ def remove_utility_files():
 def remove_heroku_files():
     file_names = ["Procfile", "runtime.txt", "requirements.txt"]
     for file_name in file_names:
-        if file_name == "requirements.txt" and "{{ cookiecutter.ci_tool }}".lower() == "travis":
+        if file_name == "requirements.txt" and CI_TOOL.lower() == "travis":
             # don't remove the file if we are using travisci but not using heroku
             continue
         os.remove(file_name)
@@ -562,18 +564,18 @@ def main():
     if "{{ cookiecutter.editor }}" != "PyCharm":
         remove_pycharm_files()
 
-    if "{{ cookiecutter.use_docker }}".lower() == "y":
+    if USE_DOCKER.lower() == "y":
         remove_utility_files()
     else:
         remove_docker_files()
 
-    if "{{ cookiecutter.use_docker }}".lower() == "y" and "{{ cookiecutter.cloud_provider}}" != "AWS":
+    if USE_DOCKER.lower() == "y" and "{{ cookiecutter.cloud_provider}}" != "AWS":
         remove_aws_dockerfile()
 
     if "{{ cookiecutter.use_heroku }}".lower() == "n":
         remove_heroku_files()
 
-    if "{{ cookiecutter.use_docker }}".lower() == "n" and "{{ cookiecutter.use_heroku }}".lower() == "n":
+    if USE_DOCKER.lower() == "n" and "{{ cookiecutter.use_heroku }}".lower() == "n":
         if "{{ cookiecutter.keep_local_envs_in_vcs }}".lower() == "y":
             print(
                 INFO + ".env(s) are only utilized when Docker Compose and/or "
@@ -593,16 +595,16 @@ def main():
         remove_sass_files()
         remove_packagejson_file()
         remove_prettier_pre_commit()
-        if "{{ cookiecutter.use_docker }}".lower() == "y":
+        if USE_DOCKER.lower() == "y":
             remove_node_dockerfile()
     else:
         handle_js_runner(
             "{{ cookiecutter.frontend_pipeline }}",
-            use_docker=("{{ cookiecutter.use_docker }}".lower() == "y"),
+            use_docker=(USE_DOCKER.lower() == "y"),
             use_async=("{{ cookiecutter.use_async }}".lower() == "y"),
         )
 
-    if "{{ cookiecutter.cloud_provider }}" == "None" and "{{ cookiecutter.use_docker }}".lower() == "n":
+    if "{{ cookiecutter.cloud_provider }}" == "None" and USE_DOCKER.lower() == "n":
         print(
             WARNING + "You chose to not use any cloud providers nor Docker, "
             "media files won't be served in production." + TERMINATOR
@@ -611,22 +613,22 @@ def main():
 
     if "{{ cookiecutter.use_celery }}".lower() == "n":
         remove_celery_files()
-        if "{{ cookiecutter.use_docker }}".lower() == "y":
+        if USE_DOCKER.lower() == "y":
             remove_celery_compose_dirs()
 
-    if "{{ cookiecutter.ci_tool }}" != "Travis":
+    if CI_TOOL != "Travis":
         remove_dottravisyml_file()
 
-    if "{{ cookiecutter.ci_tool }}" != "Gitlab":
+    if CI_TOOL != "Gitlab":
         remove_dotgitlabciyml_file()
 
-    if "{{ cookiecutter.ci_tool }}" != "Github":
+    if CI_TOOL != "Github":
         remove_dotgithub_folder()
 
-    if "{{ cookiecutter.ci_tool }}" != "Drone":
+    if CI_TOOL != "Drone":
         remove_dotdrone_file()
 
-    if "{{ cookiecutter.use_dependabot }}".lower() == "n":
+    if CI_TOOL == "Github" and "{{ cookiecutter.use_dependabot }}".lower() == "n":
         remove_dependabot_files()
 
     if "{{ cookiecutter.use_drf }}".lower() == "n":
@@ -638,7 +640,7 @@ def main():
     if "{{ cookiecutter.use_allauth }}".lower() == "n":
         remove_allauth_files()
 
-    if "{{ cookiecutter.use_readthedocs }}".lower() == "n":
+    if USE_DOCKER.lower() == "y" and "{{ cookiecutter.use_readthedocs }}".lower() == "n":
         remove_readthedocs_files()
 
     if "{{ cookiecutter.use_async }}".lower() == "n":
